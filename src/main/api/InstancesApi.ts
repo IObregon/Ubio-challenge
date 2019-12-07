@@ -14,7 +14,7 @@ export default class InstncesApi implements IResource<Instance> {
     let newInstance: Instance = {
       ...data,
       createdAt: data.createdAt || new Date(),
-      updatedAt: data.updatedAt || new Date()
+      updatedAt: data.createdAt || new Date()
     }
     const group = this.groups.find(group => group.group === newInstance.group);
     if (group) {
@@ -24,6 +24,19 @@ export default class InstncesApi implements IResource<Instance> {
     }
     return newInstance;
   }
+
+  delete(data: Instance): void {
+    const group = this.groups.find(group => group.group === data.group);
+    if (group) {
+      this.deleteInstance(group, data.id);
+      group.updatedAt = new Date();
+    }
+  }
+
+  private deleteInstance(group: Group, id: String) {
+    group.instances = group.instances.filter(instance => instance.id !== id);
+  }
+
   private updateGroup(group: Group, newInstance: Instance): Instance {
     group.updatedAt = newInstance.createdAt;
     const instance = group.instances.find(instance => instance.id === newInstance.id);
