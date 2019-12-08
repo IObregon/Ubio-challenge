@@ -39,7 +39,7 @@ export default class InstncesApi implements IResource<Instance, InstanceResult> 
   }
 
   private updateGroup(group: Group, newInstance: Instance): Instance {
-    group.updatedAt = newInstance.createdAt;
+    group.updatedAt = newInstance.createdAt || new Date();
     const instance = group.instances.find(instance => instance.id === newInstance.id);
     if (instance) {
       instance.updatedAt = new Date();
@@ -52,8 +52,8 @@ export default class InstncesApi implements IResource<Instance, InstanceResult> 
   private createNewGroup(newInstance: Instance): void {
     const newGroup: Group = {
       group: newInstance.group,
-      createdAt: newInstance.createdAt,
-      updatedAt: newInstance.updatedAt,
+      createdAt: newInstance.createdAt || new Date(),
+      updatedAt: newInstance.updatedAt || new Date(),
       instances: [newInstance]
     }
     this.groups.push(newGroup);

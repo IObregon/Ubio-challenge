@@ -5,8 +5,8 @@ export default class InstanceResult {
     this.id = instanceObject.id;
     this.group = instanceObject.group;
     this.meta = instanceObject.meta;
-    this.createdAt = instanceObject.createdAt.getTime();
-    this.updatedAt = instanceObject.updatedAt.getTime();
+    this.createdAt = instanceObject.createdAt ? instanceObject.createdAt.getTime() : new Date().getTime();
+    this.updatedAt = instanceObject.updatedAt ? instanceObject.updatedAt.getTime() : new Date().getTime();
   }
   public id: String;
   public group: String

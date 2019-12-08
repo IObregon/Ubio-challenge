@@ -52,8 +52,10 @@ describe('Instances API', () => {
       expect(groups[0].instances.length).toBe(1);
       expect(groups[0].createdAt.getTime()).toEqual(prevResult.createdAt);
       expect(groups[0].updatedAt.getTime()).not.toEqual(prevResult.createdAt);
+      if (groups[0].instances[0].updatedAt && groups[0].instances[0].createdAt) {
       expect(groups[0].instances[0].updatedAt.getTime()).toEqual(result.updatedAt);
       expect(groups[0].instances[0].createdAt.getTime()).toEqual(prevResult.createdAt);
+      }
     });
     it('If there was already meta data it is merged.', () => {
       const groups: Group[] = [];
@@ -110,6 +112,10 @@ describe('Instances API', () => {
       insertOneInstance(group, instanceApi, id);
       instanceApi.delete({ id: 'differentId', group });
 
+      expect(groups.length).toBe(1);
+      expect(groups[0].instances.length).toBe(1);
+    })
+  });
       expect(groups.length).toBe(1);
       expect(groups[0].instances.length).toBe(1);
     })
