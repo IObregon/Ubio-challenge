@@ -53,8 +53,8 @@ describe('Instances API', () => {
       expect(groups[0].createdAt.getTime()).toEqual(prevResult.createdAt);
       expect(groups[0].updatedAt.getTime()).not.toEqual(prevResult.createdAt);
       if (groups[0].instances[0].updatedAt && groups[0].instances[0].createdAt) {
-      expect(groups[0].instances[0].updatedAt.getTime()).toEqual(result.updatedAt);
-      expect(groups[0].instances[0].createdAt.getTime()).toEqual(prevResult.createdAt);
+        expect(groups[0].instances[0].updatedAt.getTime()).toEqual(result.updatedAt);
+        expect(groups[0].instances[0].createdAt.getTime()).toEqual(prevResult.createdAt);
       }
     });
     it('If there was already meta data it is merged.', () => {
@@ -116,6 +116,31 @@ describe('Instances API', () => {
       expect(groups[0].instances.length).toBe(1);
     })
   });
+  describe('deleteExpiredInstances', () => {
+    it('If there is one instance expired in one group, is deleted', () => {
+      const groups: Group[] = [];
+      const instanceApi = new InstanceApi(groups);
+      const group = 'particle-detector';
+      const id = 'id'
+      const yesterday: Date = (d => new Date(d.setDate(d.getDate() - 1)))(new Date);
+      insertOneInstance(group, instanceApi, id, {}, yesterday);
+
+      instanceApi.deleteExpiredInstances(60);
+
+      expect(groups.length).toBe(1);
+      expect(groups[0].instances.length).toBe(0);
+    });
+    it('If there are two instance one expired and other not in one group, only the expired one is deleted', () => {
+      const groups: Group[] = [];
+      const instanceApi = new InstanceApi(groups);
+      const group = 'particle-detector';
+      const id = 'id'
+      const yesterday: Date = (d => new Date(d.setDate(d.getDate() - 1)))(new Date);
+      insertOneInstance(group, instanceApi, id, {}, yesterday);
+      insertOneInstance(group, instanceApi, id + 2, {}, new Date());
+
+      instanceApi.deleteExpiredInstances(60);
+
       expect(groups.length).toBe(1);
       expect(groups[0].instances.length).toBe(1);
     })

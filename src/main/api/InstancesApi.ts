@@ -34,6 +34,17 @@ export default class InstncesApi implements IResource<Instance, InstanceResult> 
     }
   }
 
+  deleteExpiredInstances(maxAge: number): void {
+    const minimunDate: Date = new Date(new Date().getTime() - maxAge * 1000 * 60);
+    this.groups.forEach(group => {
+      group.instances.forEach(instance => {
+        if (instance.updatedAt && instance.updatedAt < minimunDate) {
+          this.deleteInstance(group, instance.id);
+        }
+      })
+    });
+  }
+
   private deleteInstance(group: Group, id: String) {
     group.instances = group.instances.filter(instance => instance.id !== id);
   }
