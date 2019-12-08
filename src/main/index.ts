@@ -23,7 +23,11 @@ app.delete('/:group/:id', (req: express.Request, res: express.Response) => {
 
 app.get('/', (req: express.Request, res: express.Response) => {
   res.json(groupApi.findAll());
-})
+});
+
+app.get('/:group', (req: express.Request, res: express.Response) => {
+  res.json(groupApi.findOne(req.params['group']));
+});
 
 
 app.listen(5000, () => {
