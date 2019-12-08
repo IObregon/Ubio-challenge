@@ -1,16 +1,17 @@
 import IResource from "../types/IResource";
 import Group from "../types/Group"
 import Instance from "../types/Instance";
+import InstanceResult from "../types/InstanceResult";
 
 
-export default class InstncesApi implements IResource<Instance> {
+export default class InstncesApi implements IResource<Instance, InstanceResult> {
   private groups: Group[];
 
   constructor(groups: Group[]) {
     this.groups = groups;
   }
 
-  create(data: Instance): Instance {
+  create(data: Instance): InstanceResult {
     let newInstance: Instance = {
       ...data,
       createdAt: data.createdAt || new Date(),
@@ -22,7 +23,7 @@ export default class InstncesApi implements IResource<Instance> {
     } else {
       this.createNewGroup(newInstance);
     }
-    return newInstance;
+    return new InstanceResult(newInstance);
   }
 
   delete(data: Instance): void {
