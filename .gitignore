@@ -3,3 +3,4 @@ src/**/*.js
 src/**/*.map
 coverage
 package-lock.json
+dist/
