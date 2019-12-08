@@ -5,8 +5,10 @@ import InstanceApi from './api/InstancesApi'
 import Group from './types/Group';
 import GroupsApi from './api/GroupsApi';
 
-const maxAge: string = process.env.MAX_AGE_IN_MINUTES || "60";
-const interval: string = process.env.INTERVAL_TIME_IN_MINUTES || "60";
+const MAXAGE: number = parseEnvParam(process.env.MAX_AGE_IN_MINUTES);
+const INTERVAL: number = parseEnvParam(process.env.INTERVAL_TIME_IN_MINUTES);
+const MILLISECONDS_IN_SECOND = 1000;
+const SECONDS_IN_MINUTE = 60;
 
 const app = express();
 const groups: Group[] = [];
@@ -32,9 +34,12 @@ app.get('/:group', (req: express.Request, res: express.Response) => {
   res.json(groupApi.findOne(req.params['group']));
 });
 
-
 app.listen(5000, () => {
-  console.log("Interval value is: ", interval, 'maxAge value is: ', maxAge);
+  console.log('INTERVAL value is: ', INTERVAL, 'MAXAGE value is: ', MAXAGE);
   console.log('server started on port 5000');
-  setInterval(() => { instanceApi.deleteExpiredInstances(+maxAge) }, +interval * 1000 * 60)
+  setInterval(() => { instanceApi.deleteExpiredInstances(MAXAGE) }, INTERVAL * MILLISECONDS_IN_SECOND * SECONDS_IN_MINUTE)
 });
+
+function parseEnvParam(envParam: String | undefined) {
+  return Number(envParam) !== NaN ? Number(envParam || 60) : 60;
+}
