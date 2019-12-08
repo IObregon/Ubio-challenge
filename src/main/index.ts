@@ -5,6 +5,9 @@ import InstanceApi from './api/InstancesApi'
 import Group from './types/Group';
 import GroupsApi from './api/GroupsApi';
 
+const maxAge: string = process.env.MAX_AGE_IN_MINUTES || "60";
+const interval: string = process.env.INTERVAL_TIME_IN_MINUTES || "60";
+
 const app = express();
 const groups: Group[] = [];
 const instanceApi = new InstanceApi(groups);
@@ -31,5 +34,7 @@ app.get('/:group', (req: express.Request, res: express.Response) => {
 
 
 app.listen(5000, () => {
+  console.log("Interval value is: ", interval, 'maxAge value is: ', maxAge);
   console.log('server started on port 5000');
-})
+  setInterval(() => { instanceApi.deleteExpiredInstances(+maxAge) }, +interval * 1000 * 60)
+});
