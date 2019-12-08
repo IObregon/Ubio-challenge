@@ -7,6 +7,7 @@ import GroupsApi from './api/GroupsApi';
 
 const MAXAGE: number = parseEnvParam(process.env.MAX_AGE_IN_MINUTES);
 const INTERVAL: number = parseEnvParam(process.env.INTERVAL_TIME_IN_MINUTES);
+const PORT: number = parseEnvParam(process.env.PORT, 5000);
 const MILLISECONDS_IN_SECOND = 1000;
 const SECONDS_IN_MINUTE = 60;
 
@@ -34,12 +35,12 @@ app.get('/:group', (req: express.Request, res: express.Response) => {
   res.json(groupApi.findOne(req.params['group']));
 });
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log('INTERVAL value is: ', INTERVAL, 'MAXAGE value is: ', MAXAGE);
-  console.log('server started on port 5000');
+  console.log(`server started on port ${PORT}`);
   setInterval(() => { instanceApi.deleteExpiredInstances(MAXAGE) }, INTERVAL * MILLISECONDS_IN_SECOND * SECONDS_IN_MINUTE)
 });
 
-function parseEnvParam(envParam: String | undefined) {
-  return Number(envParam) !== NaN ? Number(envParam || 60) : 60;
+function parseEnvParam(envParam: String | undefined, defaultValue: number = 60) {
+  return Number(envParam) !== NaN ? Number(envParam || defaultValue) : defaultValue;
 }

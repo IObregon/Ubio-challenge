@@ -5,9 +5,12 @@
 2. ```cd to the repository```
 3. ```npm install```
 4. ```npm run build```
-5. ```npm run start [MAX_AGE_IN_MINUTES] [INTERVAL_TIME_IN_MINUTES]```
+5. ```npm run start [MAX_AGE_IN_MINUTES] [INTERVAL_TIME_IN_MINUTES] [PORT]```
    1. ```MAX_AGE_IN_MINUTE: If the last communication with one Instance is bigger than this it would be deleted. Defaults to 60```
    2. ```INTERVAL_TIME_IN_MINUTES: Number of minutes the background task wait before executing again```
+   3. ```PORT: In what port will the API start listening to. Some ports require ROOT privileges```
+6. ```MAX_AGE_IN_MINUTE=1 INTERVAL_TIME_IN_MINUTES=2 PORT=8080 npm run start```
+   1. This will start the API on PORT 8080. The background task will be executed every 2 minutes and would delete all the Instances that are older than 1 minute.
 
 ## Endpoints
 
