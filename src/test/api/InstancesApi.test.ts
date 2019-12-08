@@ -87,8 +87,6 @@ describe('Instances API', () => {
 
       expect(groups.length).toBe(1);
       expect(groups[0].instances.length).toBe(0);
-      console.log(groups[0].updatedAt);
-      console.log(yesterday);
       expect(groups[0].updatedAt).not.toEqual(yesterday);
     });
 
